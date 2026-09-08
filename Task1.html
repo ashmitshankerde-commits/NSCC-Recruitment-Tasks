@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 1: Signup & Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+        }
+        .container {
+            display: flex; gap: 50px; justify-content: center; flex-wrap: wrap;
+        }
+        form, div.dashboard-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        h3 {
+            color: #333;
+            border-bottom: 2px solid #8ec5fc;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        input {
+            display: block; margin-bottom: 15px; width: 250px; padding: 10px;
+            border: 1px solid #ccc; border-radius: 6px; outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus {
+            border-color: #8ec5fc;
+            box-shadow: 0 0 5px rgba(142, 197, 252, 0.5);
+        }
+        button {
+            padding: 10px 20px; background-color: #8ec5fc; color: #fff;
+            border: none; border-radius: 6px; cursor: pointer;
+            font-weight: bold; transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #e0c3fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        table { border-collapse: collapse; width: 500px; margin-top: 15px; }
+        th { background-color: #8ec5fc; color: white; padding: 12px; text-align: left; }
+        td { border-bottom: 1px solid #eee; padding: 12px; text-align: left; }
+        tr { transition: background-color 0.2s; }
+        tr:hover { background-color: #f8f9fa; }
+        .error { color: #ff4d4f; font-size: 12px; margin-top: -10px; margin-bottom: 10px; }
+        .delete-btn { background-color: #ff4d4f; }
+        .delete-btn:hover { background-color: #d9363e; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- SIGNUP FORM -->
+    <form id="signupForm">
+        <h3>Signup</h3>
+        <input type="text" id="username" placeholder="Username">
+        <div id="userError" class="error"></div>
+
+        <input type="email" id="email" placeholder="Email">
+        <div id="emailError" class="error"></div>
+
+        <input type="password" id="password" placeholder="Password">
+        <div id="passError" class="error"></div>
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- DASHBOARD TABLE -->
+    <div class="dashboard-container">
+        <h3>Dashboard</h3>
+        <table id="dashboardTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password (Hashed)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- User rows will appear here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            let char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash).toString(16);
+    }
+
+    const form = document.getElementById('signupForm');
+    const tableBody = document.getElementById('tableBody');
+    
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        document.getElementById('userError').innerText = '';
+        document.getElementById('emailError').innerText = '';
+        document.getElementById('passError').innerText = '';
+
+        let isValid = true;
+
+        if (username === '') {
+            document.getElementById('userError').innerText = 'Username cannot be empty';
+            isValid = false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = 'Invalid email format';
+            isValid = false;
+        }
+
+        if (password.length < 6) {
+            document.getElementById('passError').innerText = 'Password must be at least 6 characters';
+            isValid = false;
+        }
+
+        if (isValid) {
+            const hashedPassword = simpleHash(password);
+            
+            const newUser = { username, email, password: hashedPassword };
+            users.push(newUser);
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            form.reset(); 
+            renderTable(); 
+        }
+    });
+
+    function renderTable() {
+        tableBody.innerHTML = ''; 
+        
+        users.forEach((user, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.password}</td>
+                <td><button class="delete-btn" onclick="deleteUser(${index})">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function deleteUser(index) {
+        users.splice(index, 1); 
+        localStorage.setItem('users', JSON.stringify(users)); 
+        renderTable(); 
+    }
+
+    renderTable();
+</script>
+</body>
+</html>

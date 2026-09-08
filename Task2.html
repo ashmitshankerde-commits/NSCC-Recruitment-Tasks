@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Interactive Portfolio</title>
+    <style>
+        /* CSS Variables for seamless Dark/Light theme switching */
+        :root {
+            --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --text-main: #333333;
+            --text-secondary: #555555;
+            --tag-bg: #8ec5fc;
+            --tag-text: #ffffff;
+            --btn-bg: #333333;
+            --btn-text: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg-gradient: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #e94560);
+            --card-bg: rgba(20, 20, 20, 0.8);
+            --text-main: #ffffff;
+            --text-secondary: #dddddd;
+            --tag-bg: #e94560;
+            --tag-text: #ffffff;
+            --btn-bg: #ffffff;
+            --btn-text: #333333;
+        }
+
+        /* Animated Background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            transition: color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Card */
+        .profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, background 0.4s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Profile Image */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--tag-bg);
+            padding: 5px;
+            transition: transform 0.4s ease;
+        }
+
+        .profile-img:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        /* Colourful Text */
+        h1 {
+            margin: 15px 0 5px;
+            font-size: 2.5em;
+            background: -webkit-linear-gradient(45deg, #ff6b6b, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Interactive Tags */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .skill-tag:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Theme Toggle Button */
+        #themeToggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* Social Links */
+        .social-links {
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            color: var(--tag-bg);
+            font-weight: bold;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .profile-card { padding: 20px; }
+            h1 { font-size: 2em; }
+            #themeToggle { position: static; margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeToggle">🌓 Toggle Theme</button>
+
+    <div class="profile-card">
+        <!-- REPLACE THIS LINK with a link to your actual photo, or put an image file in your folder and link it (e.g., src="myphoto.jpg") -->
+        <img src="profile.jpg" alt="My Photograph" class="profile-img">
+        
+        <!-- REPLACE 'YOUR NAME' -->
+        <h1>Ashmit Shankar De</h1>
+        <h2>B.Tech Fresher @ SRM KTR</h2>
+        
+        <p>Hi! I'm a first-semester student eager to dive deep into the tech world. I am currently building my foundation in C programming, with my sights firmly set on mastering Data Structures and Algorithms, SQL, and Full-Stack Web Development. This page is my first step into building responsive user interfaces.</p>
+        
+        <div class="skills-container">
+            <span class="skill-tag">💻 C Programming</span>
+            <span class="skill-tag">🌐 HTML / CSS / JS</span>
+            <span class="skill-tag">🧩 DSA (Upcoming)</span>
+            <span class="skill-tag">🗄️ SQL (Upcoming)</span>
+            <span class="skill-tag">🎮 Gaming</span>
+        </div>
+        
+        <div class="social-links">
+            <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const toggleBtn = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // 1. Check LocalStorage for saved theme preference on page load
+        // This fulfills the "Brownie Point" requirement
+        const savedTheme = localStorage.getItem('portfolioTheme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        // 2. Toggle Theme on Button Click
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            // Save the new preference to localStorage so it persists when refreshed
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('portfolioTheme', 'dark');
+            } else {
+                localStorage.setItem('portfolioTheme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
